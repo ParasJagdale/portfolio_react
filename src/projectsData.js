@@ -52,7 +52,7 @@ export const projects = [
   techStack: ["HTML", "CSS", "JavaScript", "OpenRouter API", "PDF.js"],
   liveLink: "https://mock-interview-app-three.vercel.app/", // Replace with your deployed link
   codeLink: "https://github.com/ParasJagdale/mock-interview-app", // Replace with your actual repo link
-  image: "/images/ai-interviewer.png" // Replace with actual image path
+  image: "/images/AI_Interviewer.png" // Replace with actual image path
 }
 
 ];
