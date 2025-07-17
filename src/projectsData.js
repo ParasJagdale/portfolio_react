@@ -45,4 +45,14 @@ export const projects = [
     codeLink: "https://github.com/ParasBot/Lottery-Game",
     image: "/images/lottery.png",
   },
+  {
+  title: "AI Interviewer - Mock Interview Platform",
+  description:
+    "A smart interview simulation tool for students that generates personalized interview questions from uploaded resumes and job descriptions, with instant AI-based feedback and scoring.",
+  techStack: ["HTML", "CSS", "JavaScript", "OpenRouter API", "PDF.js"],
+  liveLink: "https://mock-interview-app-three.vercel.app/", // Replace with your deployed link
+  codeLink: "https://github.com/ParasJagdale/mock-interview-app", // Replace with your actual repo link
+  image: "/images/ai-interviewer.png" // Replace with actual image path
+}
+
 ];
