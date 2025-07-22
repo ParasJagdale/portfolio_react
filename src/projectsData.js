@@ -1,5 +1,14 @@
 export const projects = [
   {
+  title: "Wanderlust - Travel Listing Web App",
+  description:
+    "A dynamic web application for exploring and posting travel listings. Features user authentication, reviews, and image uploads.",
+  techStack: ["Node.js", "Express", "MongoDB", "EJS", "Cloudinary"],
+  liveLink: "https://wanderlust-travel-marketplace.onrender.com/listings", 
+  codeLink: "https://github.com/ParasJagdale/wanderlust-travel-marketplace", 
+  image: "/images/Wanderlust.png",
+},
+  {
     title: "MERN-Based Investment Platform (Inspired by Zerodha)",
     description:
       "A full-featured stock trading interface using React, Node.js, and MongoDB.",
