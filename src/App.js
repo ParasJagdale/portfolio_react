@@ -518,6 +518,7 @@ const Portfolio = () => {
                   Follow Me
                 </h4>
                 <div className="flex gap-4">
+<<<<<<< HEAD
                   <a
                     href="https://github.com/ParasBot"
                     target="_blank"
@@ -542,6 +543,35 @@ const Portfolio = () => {
                   >
                     <Instagram size={20} />
                   </a>
+=======
+                  <button className="w-12 h-12 bg-gray-800 text-white rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors">
+                    <a
+                      href="https://github.com/parasjagdale"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Github size={20} />
+                    </a>
+                  </button>
+                  <button className="w-12 h-12 bg-blue-700 text-white rounded-full flex items-center justify-center hover:bg-blue-800 transition-colors">
+                    <a
+                      href="https://www.linkedin.com/in/paras-jagdale/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Linkedin size={20} />
+                    </a>
+                  </button>
+                  <button className="w-12 h-12 bg-pink-600 text-white rounded-full flex items-center justify-center hover:bg-pink-700 transition-colors">
+                    <a
+                      href="https://www.instagram.com/paras__029_/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Instagram size={20} />
+                    </a>
+                  </button>
+>>>>>>> 92834507b3a6428b415eeebe55fe1679a6a0276f
                 </div>
               </div>
             </div>

@@ -1,5 +1,14 @@
 export const projects = [
   {
+  title: "Wanderlust - Travel Listing Web App",
+  description:
+    "A dynamic web application for exploring and posting travel listings. Features user authentication, reviews, and image uploads.",
+  techStack: ["Node.js", "Express", "MongoDB", "EJS", "Cloudinary"],
+  liveLink: "https://wanderlust-travel-marketplace.onrender.com/listings", 
+  codeLink: "https://github.com/ParasJagdale/wanderlust-travel-marketplace", 
+  image: "/images/Wanderlust.png",
+},
+  {
     title: "MERN-Based Investment Platform (Inspired by Zerodha)",
     description:
       "A full-featured stock trading interface using React, Node.js, and MongoDB.",
@@ -45,4 +54,17 @@ export const projects = [
     codeLink: "https://github.com/ParasBot/Lottery-Game",
     image: "/images/lottery.png",
   },
+<<<<<<< HEAD
+=======
+  {
+  title: "AI Interviewer - Mock Interview Platform",
+  description:
+    "A smart interview simulation tool for students that generates personalized interview questions from uploaded resumes and job descriptions, with instant AI-based feedback and scoring.",
+  techStack: ["HTML", "CSS", "JavaScript", "OpenRouter API", "PDF.js"],
+  liveLink: "https://mock-interview-app-three.vercel.app/", // Replace with your deployed link
+  codeLink: "https://github.com/ParasJagdale/mock-interview-app", // Replace with your actual repo link
+  image: "/images/AI_Interviewer.png" // Replace with actual image path
+}
+
+>>>>>>> 92834507b3a6428b415eeebe55fe1679a6a0276f
 ];
