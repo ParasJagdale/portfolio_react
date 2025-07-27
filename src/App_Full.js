@@ -47,64 +47,49 @@ const Portfolio = () => {
     }
 
     try {
-      // Initialize EmailJS
+      // Initialize EmailJS (you only need to do this once in your app)
       emailjs.init(EMAIL_CONFIG.PUBLIC_KEY);
 
-      // Prepare email parameters for you (main contact email)
+      // Prepare email parameters
       const templateParams = {
         from_name: contactForm.name,
         from_email: contactForm.email,
         message: contactForm.message,
+        to_name: 'Paras Jagdale',
         to_email: 'parasjagdale15@gmail.com',
         reply_to: contactForm.email,
       };
 
-      // Send email to you (this is the primary email)
+      // Send email to you
       const response = await emailjs.send(
         EMAIL_CONFIG.SERVICE_ID,
         EMAIL_CONFIG.TEMPLATE_ID,
         templateParams
       );
 
-      // Only proceed if the main email was successful
+      // Send auto-reply to sender
+      const autoReplyParams = {
+        to_name: contactForm.name,
+        to_email: contactForm.email,
+        from_name: 'Paras Jagdale',
+        message: `Hi ${contactForm.name},\n\nThank you for reaching out! I've received your message and will get back to you as soon as possible.\n\nBest regards,\nParas Jagdale\n\nPortfolio: https://parasjagdale.dev\nEmail: parasjagdale15@gmail.com`,
+      };
+
+      // Send auto-reply (you'll need to create a separate template for this)
+      await emailjs.send(
+        EMAIL_CONFIG.SERVICE_ID,
+        'template_autoreply', // You'll need to create this template
+        autoReplyParams
+      );
+
       if (response.status === 200) {
-        // Try to send auto-reply, but don't fail if it doesn't work
-        try {
-          const autoReplyParams = {
-            to_name: contactForm.name,
-            to_email: contactForm.email,
-            from_name: 'Paras Jagdale',
-            // Try multiple common variable names for email
-            user_email: contactForm.email,
-            recipient_email: contactForm.email,
-            email: contactForm.email,
-            // Try multiple common variable names for name
-            user_name: contactForm.name,
-            recipient_name: contactForm.name,
-            name: contactForm.name,
-            // Message content
-            message: `Hi ${contactForm.name},\n\nThank you for reaching out! I've received your message and will get back to you as soon as possible.\n\nBest regards,\nParas Jagdale\n\nPortfolio: https://parasjagdale.dev\nEmail: parasjagdale15@gmail.com`,
-          };
-
-          // Send auto-reply (optional - won't fail main functionality)
-          const autoReplyResponse = await emailjs.send(
-            EMAIL_CONFIG.SERVICE_ID,
-            EMAIL_CONFIG.AUTOREPLY_TEMPLATE_ID,
-            autoReplyParams
-          );
-          
-        } catch (autoReplyError) {
-          // Auto-reply failed - could log to external service in production
-          // Don't fail the whole process if auto-reply fails
-        }
-
         setSubmitStatus("success");
         setContactForm({ name: "", email: "", message: "" });
       } else {
         setSubmitStatus("error");
       }
     } catch (error) {
-      // Could implement error logging service here
+      console.error('EmailJS Error:', error);
       setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);
@@ -120,6 +105,7 @@ const Portfolio = () => {
   };
 
   return (
+    
     <div className="min-h-screen bg-gray-900 text-gray-100">
       {/* Header */}
       <header className="bg-gray-950 shadow-sm fixed w-full top-0 z-50">
@@ -240,7 +226,6 @@ const Portfolio = () => {
           </div>
         </div>
       </section>
-
       {/* About Section */}
       <section id="about" className="py-16 bg-gray-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -463,7 +448,7 @@ const Portfolio = () => {
         </div>
       </section>
 
-      {/* Contact Section - Enhanced */}
+      {/* Contact Section */}
       <section id="contact" className="py-16 bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -518,30 +503,33 @@ const Portfolio = () => {
                   Follow Me
                 </h4>
                 <div className="flex gap-4">
-                  <a
-                    href="https://github.com/ParasBot"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-12 h-12 bg-gray-800 text-white rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors"
-                  >
-                    <Github size={20} />
-                  </a>
-                  <a
-                    href="https://www.linkedin.com/in/paras-jagdale/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-12 h-12 bg-blue-700 text-white rounded-full flex items-center justify-center hover:bg-blue-800 transition-colors"
-                  >
-                    <Linkedin size={20} />
-                  </a>
-                  <a
-                    href="https://www.instagram.com/paras__029_/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-12 h-12 bg-pink-600 text-white rounded-full flex items-center justify-center hover:bg-pink-700 transition-colors"
-                  >
-                    <Instagram size={20} />
-                  </a>
+                  <button className="w-12 h-12 bg-gray-800 text-white rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors">
+                    <a
+                      href="https://github.com/ParasBot"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Github size={20} />
+                    </a>
+                  </button>
+                  <button className="w-12 h-12 bg-blue-700 text-white rounded-full flex items-center justify-center hover:bg-blue-800 transition-colors">
+                    <a
+                      href="https://www.linkedin.com/in/paras-jagdale/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Linkedin size={20} />
+                    </a>
+                  </button>
+                  <button className="w-12 h-12 bg-pink-600 text-white rounded-full flex items-center justify-center hover:bg-pink-700 transition-colors">
+                    <a
+                      href="https://www.instagram.com/paras__029_/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Instagram size={20} />
+                    </a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -550,81 +538,82 @@ const Portfolio = () => {
               <h3 className="text-2xl font-semibold text-white mb-6">
                 Send Me a Message
               </h3>
-              <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-medium text-gray-300 mb-2"
-                >
-                  Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={contactForm.name}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-4 py-2 border border-gray-700 bg-gray-900 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Your Name"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-gray-300 mb-2"
-                >
-                  Email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={contactForm.email}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-4 py-2 border border-gray-700 bg-gray-900 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="your.email@example.com"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="message"
-                  className="block text-sm font-medium text-gray-300 mb-2"
-                >
-                  Message
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  value={contactForm.message}
-                  onChange={handleInputChange}
-                  required
-                  rows={4}
-                  className="w-full px-4 py-2 border border-gray-700 bg-gray-900 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Tell me about your project..."
-                />
-              </div>
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isSubmitting ? "Sending..." : "Send Message"}
-              </button>
-              {submitStatus === "success" && (
-                <div className="text-green-400 text-center p-3 bg-green-900/20 rounded-lg border border-green-500/30">
-                  <div className="font-semibold">Message sent successfully!</div>
-                  <div className="text-sm mt-1">Thank you for reaching out. I'll get back to you soon!</div>
+              <div className="space-y-6">
+                <div>
+                  <label
+                    htmlFor="name"
+                    className="block text-sm font-medium text-gray-300 mb-2"
+                  >
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={contactForm.name}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full px-4 py-2 border border-gray-700 bg-gray-900 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Your Name"
+                  />
                 </div>
-              )}
-              {submitStatus === "error" && (
-                <div className="text-red-400 text-center p-3 bg-red-900/20 rounded-lg border border-red-500/30">
-                  <div className="font-semibold">Oops! Something went wrong.</div>
-                  <div className="text-sm mt-1">Please check your information and try again, or contact me directly at parasjagdale15@gmail.com</div>
+                <div>
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-medium text-gray-300 mb-2"
+                  >
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={contactForm.email}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full px-4 py-2 border border-gray-700 bg-gray-900 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="your.email@example.com"
+                  />
                 </div>
-              )}
-              </form>
+                <div>
+                  <label
+                    htmlFor="message"
+                    className="block text-sm font-medium text-gray-300 mb-2"
+                  >
+                    Message
+                  </label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    value={contactForm.message}
+                    onChange={handleInputChange}
+                    required
+                    rows={4}
+                    className="w-full px-4 py-2 border border-gray-700 bg-gray-900 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Tell me about your project..."
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={handleSubmit}
+                  disabled={isSubmitting}
+                  className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isSubmitting ? "Sending..." : "Send Message"}
+                </button>
+                {submitStatus === "success" && (
+                  <div className="text-green-400 text-center p-3 bg-green-900/20 rounded-lg border border-green-500/30">
+                    <div className="font-semibold">Message sent successfully!</div>
+                    <div className="text-sm mt-1">Thank you for reaching out. I'll get back to you soon, and you should receive a confirmation email shortly.</div>
+                  </div>
+                )}
+                {submitStatus === "error" && (
+                  <div className="text-red-400 text-center p-3 bg-red-900/20 rounded-lg border border-red-500/30">
+                    <div className="font-semibold">Oops! Something went wrong.</div>
+                    <div className="text-sm mt-1">Please check your information and try again, or contact me directly at parasjagdale15@gmail.com</div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -634,7 +623,7 @@ const Portfolio = () => {
       <footer className="bg-gray-950 text-gray-400 py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <p className="">© Designed and Developed by Paras Jagdale. </p>
+            <p className="">© Designed and Developed Paras Jagdale. </p>
           </div>
         </div>
       </footer>
