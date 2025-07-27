@@ -54,8 +54,6 @@ export const projects = [
     codeLink: "https://github.com/ParasBot/Lottery-Game",
     image: "/images/lottery.png",
   },
-<<<<<<< HEAD
-=======
   {
   title: "AI Interviewer - Mock Interview Platform",
   description:
@@ -66,5 +64,4 @@ export const projects = [
   image: "/images/AI_Interviewer.png" // Replace with actual image path
 }
 
->>>>>>> 92834507b3a6428b415eeebe55fe1679a6a0276f
 ];
