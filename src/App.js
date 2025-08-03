@@ -510,7 +510,7 @@ const Portfolio = () => {
                 </h4>
                 <div className="flex gap-4">
                   <a
-                    href="https://github.com/ParasBot"
+                    href="https://github.com/parasjagdale"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-12 h-12 bg-gray-800 text-white rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors"
