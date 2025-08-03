@@ -36,16 +36,6 @@ export const projects = [
     image: "/images/weather.png",
   },
   {
-    title: "SplashCursor - Animated React Component",
-    description:
-      "An interactive cursor effect component with colorful splash animations, multiple themes, and performance-optimized rendering for modern React applications.",
-    techStack: ["React", "Tailwind CSS", "JavaScript", "CSS Animations"],
-    liveLink:
-      "https://claude.ai/public/artifacts/679237c5-5b18-4ff0-a2fb-26e89fa77baf",
-    codeLink: "#",
-    image: "/images/cursor.png",
-  },
-  {
     title: "Lucky Numbers - React Lottery Simulator",
     description:
       "An engaging lottery simulation app featuring random number generation, animated ball draws, ticket purchasing system, and comprehensive statistics tracking.",
