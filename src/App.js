@@ -251,10 +251,7 @@ const Portfolio = () => {
                 My Story
               </h3>
               <p className="text-gray-400 mb-6">
-                With several years of experience in web development, I
-                specialize in creating modern, responsive, and user-friendly
-                applications. I'm passionate about clean code, best practices,
-                and continuous learning.
+I’m a Computer Engineering student passionate about building modern, responsive, and user-friendly web applications. I enjoy learning through projects, solving real-world problems with code, and continuously improving my development skills.
               </p>
               <div className="flex flex-wrap gap-2">
                 <span className="px-3 py-1 bg-blue-900 text-blue-300 rounded-full text-sm">
