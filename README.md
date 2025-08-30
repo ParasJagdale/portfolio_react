@@ -53,7 +53,7 @@ A responsive and modern **portfolio website** built with **React.js** to showcas
 
 This portfolio is live at:
 
-👉 **[your-portfolio-link.com](https://your-portfolio-link.com)**
+👉 **[your-portfolio-link.com]([https://your-portfolio-link.com](https://portfolio-frontend-pink-alpha.vercel.app/))**
 
 Deployed using Vercel / Netlify / GitHub Pages.
 
