@@ -6,7 +6,7 @@ export const projects = [
     techStack: ["Node.js", "Express", "MongoDB", "EJS", "Cloudinary"],
     liveLink: "https://wanderlust-travel-marketplace.onrender.com/listings",
     codeLink: "https://github.com/ParasJagdale/wanderlust-travel-marketplace",
-    image: "/images/Wanderlust.jpg",
+    image: "/images/Wanderlust.png",
     featured: true,
   },
   {
@@ -16,7 +16,7 @@ export const projects = [
     techStack: ["React", "Node.js", "MongoDB"],
     liveLink: "https://zerodha-clone-frontend.vercel.app/",
     codeLink: "https://github.com/ParasBot/Zerodha-Clone",
-    image: "/images/mern.jpg",
+    image: "/images/mern.png",
     featured: true,
   },
   {
@@ -26,7 +26,7 @@ export const projects = [
     techStack: ["Django", "Bootstrap", "SQLite"],
     liveLink: "https://github.com/ParasBot/Django-intership-project",
     codeLink: "https://github.com/ParasBot/Django-intership-project",
-    image: "/images/python.jpg",
+    image: "/images/python.png",
   },
   {
     title: "Weather Forecast React App",
@@ -35,7 +35,7 @@ export const projects = [
     techStack: ["React", "API", "CSS"],
     liveLink: "https://weather-app-react-three-nu.vercel.app/",
     codeLink: "https://github.com/ParasBot/Weather-App-React",
-    image: "/images/weather.jpg",
+    image: "/images/weather.png",
   },
   {
     title: "SplashCursor - Animated React Component",
@@ -45,7 +45,7 @@ export const projects = [
     liveLink:
       "https://claude.ai/public/artifacts/679237c5-5b18-4ff0-a2fb-26e89fa77baf",
     codeLink: "#",
-    image: "/images/cursor.jpg",
+    image: "/images/cursor.png",
   },
   {
     title: "Lucky Numbers - React Lottery Simulator",
@@ -54,7 +54,7 @@ export const projects = [
     techStack: ["React", "Tailwind CSS", "JavaScript", "React Hooks"],
     liveLink: "https://lottery-game-chi.vercel.app/",
     codeLink: "https://github.com/ParasBot/Lottery-Game",
-    image: "/images/lottery.jpg",
+    image: "/images/lottery.png",
   },
   {
     title: "AI Interviewer - Mock Interview Platform",
@@ -63,7 +63,7 @@ export const projects = [
     techStack: ["HTML", "CSS", "JavaScript", "OpenRouter API", "PDF.js"],
     liveLink: "https://mock-interview-app-three.vercel.app/", // Replace with your deployed link
     codeLink: "https://github.com/ParasJagdale/mock-interview-app", // Replace with your actual repo link
-    image: "/images/AI_Interviewer.jpg", // Replace with actual image path
+    image: "/images/AI_Interviewer.png", // Replace with actual image path
     featured: true,
   },
 ];
