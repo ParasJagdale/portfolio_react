@@ -1,23 +1,435 @@
-import React, { useState } from "react";
-import { projects } from "./projectsData.js";
-import Galaxy from "./components/Galaxy.js";
-import emailjs from '@emailjs/browser';
-import { EMAIL_CONFIG } from "./config/emailConfig.js";
-
+import React, { useEffect, useMemo, useState } from "react";
+import { Routes, Route, Link, NavLink, useLocation } from "react-router-dom";
+import { motion, useScroll, useSpring, useReducedMotion } from "framer-motion";
+import emailjs from "@emailjs/browser";
 import {
-  Mail,
-  Phone,
-  MapPin,
   Github,
   Linkedin,
-  Instagram,
-  ExternalLink,
+  Mail,
+  MapPin,
   Menu,
+  Moon,
+  Sun,
+  Twitter,
   X,
+  FileText,
 } from "lucide-react";
+import { projects } from "./projectsData";
+import BlogList from "./pages/BlogList";
+import BlogDetail from "./pages/BlogDetail";
+import { blogs } from "./data/blogs";
 
-const Portfolio = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+const navItems = [
+  { id: "about", label: "About" },
+  { id: "projects", label: "Projects" },
+  { id: "experience", label: "Experience" },
+  { id: "contact", label: "Contact" },
+];
+
+const experiences = [
+  {
+    role: "Full-Stack Intern",
+    company: "Product Studio",
+    period: "2025 · 6 months",
+    details:
+      "Built scalable UI systems and collaborated on backend API integrations to ship production features.",
+  },
+  {
+    role: "Hackathon Finalist",
+    company: "AI Solutions Challenge",
+    period: "2024",
+    details:
+      "Led a small team to deliver an AI-driven interview practice platform focused on student outcomes.",
+  },
+  {
+    role: "Open Source Contributor",
+    company: "React Community",
+    period: "2023 - Present",
+    details:
+      "Contributed UI improvements and documentation updates to community tools.",
+  },
+];
+
+const skills = [
+  "React",
+  "Node.js",
+  "TypeScript",
+  "MongoDB",
+  "Tailwind CSS",
+  "REST APIs",
+  "Testing",
+  "UI Systems",
+];
+
+const MotionSection = ({ id, children, className }) => (
+  <motion.section
+    id={id}
+    className={className}
+    initial={{ opacity: 0, y: 24 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, amount: 0.3 }}
+    transition={{ duration: 0.6 }}
+  >
+    {children}
+  </motion.section>
+);
+
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [pathname]);
+
+  return null;
+};
+
+const ResumeModal = ({ isOpen, onClose }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/70 p-6"
+    >
+      <div className="glass-card w-full max-w-3xl border-slate-200/60 bg-white/90 p-6 dark:border-white/10 dark:bg-slate-900/70">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-xs uppercase tracking-[0.3em] text-slate-500 dark:text-slate-400">
+              Resume Preview
+            </p>
+            <h3 className="mt-2 text-xl font-semibold text-slate-900 dark:text-white">
+              Paras Jagdale
+            </h3>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-full border border-slate-200/60 p-2 text-slate-500 transition hover:text-slate-900 dark:border-white/10 dark:text-slate-300"
+            aria-label="Close resume preview"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+        <div className="mt-6 rounded-2xl border border-slate-200/50 bg-white/70 p-4 text-sm text-slate-600 dark:border-white/10 dark:bg-slate-900/50 dark:text-slate-300">
+          <p>
+            Add your PDF resume as public/resume.pdf to enable the embedded
+            preview.
+          </p>
+          <div className="mt-4 overflow-hidden rounded-xl border border-slate-200/60 bg-white dark:border-white/10 dark:bg-slate-950">
+            <iframe
+              title="Resume preview"
+              src="/resume.pdf"
+              className="h-96 w-full"
+            />
+          </div>
+        </div>
+        <div className="mt-6 flex justify-end gap-3">
+          <a
+            href="/resume.pdf"
+            className="inline-flex items-center gap-2 rounded-full bg-blue-600 px-5 py-2 text-sm font-semibold text-white transition hover:bg-blue-500"
+          >
+            <FileText className="h-4 w-4" /> Download PDF
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const Home = ({ onOpenResume }) => {
+  const featuredProjects = useMemo(
+    () => projects.filter((project) => project.featured),
+    [],
+  );
+
+  return (
+    <main className="bg-white dark:bg-slate-950">
+      <section className="mx-auto max-w-7xl px-6 pb-20 pt-32">
+        <div className="grid items-center gap-12 md:grid-cols-2">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <h1 className="text-5xl font-bold text-slate-900 dark:text-white md:text-6xl">
+              Hello,
+              <br />
+              My name is Paras
+            </h1>
+            <p className="mt-6 text-lg text-slate-600 dark:text-slate-400">
+              I'm currently a software engineering student.
+            </p>
+            <p className="mt-4 text-base text-slate-600 dark:text-slate-400">
+              My areas of interest include full-stack development, cloud
+              infrastructure, machine learning, and building scalable systems.
+            </p>
+            <p className="mt-4 text-base text-slate-600 dark:text-slate-400">
+              With a detail-oriented focus, I enjoy creating simple but
+              effective solutions to improve application performance, ease of
+              maintenance, and user experience.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-4">
+              <a
+                href="#projects"
+                className="text-sm font-medium text-slate-900 underline decoration-slate-300 underline-offset-4 transition hover:decoration-slate-500 dark:text-white dark:decoration-slate-600 dark:hover:decoration-slate-400"
+              >
+                View My Projects
+              </a>
+              <button
+                type="button"
+                onClick={onOpenResume}
+                className="text-sm font-medium text-slate-900 underline decoration-slate-300 underline-offset-4 transition hover:decoration-slate-500 dark:text-white dark:decoration-slate-600 dark:hover:decoration-slate-400"
+              >
+                Get My Resume
+              </button>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="flex justify-center md:justify-end"
+          >
+            <div className="relative h-96 w-96 overflow-hidden rounded-lg bg-slate-200 dark:bg-slate-800">
+              <img
+                src="/paras.png"
+                alt="Paras Jagdale"
+                className="h-full w-full object-cover"
+              />
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      <MotionSection id="about" className="mx-auto max-w-7xl px-6 py-20">
+        <div className="max-w-3xl">
+          <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
+            About Me
+          </h2>
+          <p className="mt-6 text-base text-slate-600 dark:text-slate-400">
+            I design and build interfaces that stay consistent at scale. My
+            approach combines clean architecture, performance budgets, and
+            design system thinking to ship reliable experiences for users and
+            teams.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            {skills.map((skill) => (
+              <span
+                key={skill}
+                className="rounded bg-slate-100 px-3 py-1.5 text-sm text-slate-700 dark:bg-slate-800 dark:text-slate-300"
+              >
+                {skill}
+              </span>
+            ))}
+          </div>
+        </div>
+      </MotionSection>
+
+      <MotionSection id="featured" className="mx-auto max-w-7xl px-6 pb-20">
+        <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
+          Featured Projects
+        </h2>
+        <div className="mt-10 grid gap-6 md:grid-cols-3">
+          {featuredProjects.map((project) => (
+            <motion.article
+              key={project.title}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="group"
+            >
+              <div className="overflow-hidden rounded-lg bg-slate-100 dark:bg-slate-800">
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  className="h-52 w-full object-cover transition duration-300 group-hover:scale-105"
+                  loading="lazy"
+                />
+              </div>
+              <h3 className="mt-4 text-xl font-bold text-slate-900 dark:text-white">
+                {project.title}
+              </h3>
+              <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
+                {project.description}
+              </p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {project.techStack.slice(0, 3).map((tech) => (
+                  <span
+                    key={tech}
+                    className="rounded bg-slate-100 px-2 py-1 text-xs text-slate-600 dark:bg-slate-800 dark:text-slate-400"
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </motion.article>
+          ))}
+        </div>
+      </MotionSection>
+
+      <MotionSection id="projects" className="mx-auto max-w-7xl px-6 pb-20">
+        <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
+          All Projects
+        </h2>
+        <p className="mt-4 text-base text-slate-600 dark:text-slate-400">
+          These are my open source projects which are fetched directly from
+          GitHub. If you're a developer, feel free to make a pull request!
+        </p>
+        <div className="mt-10 grid gap-6 md:grid-cols-3">
+          {projects.map((project) => (
+            <motion.article
+              key={project.title}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="rounded-lg border border-slate-200 bg-white p-6 transition hover:border-slate-300 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700"
+            >
+              <div className="flex items-start justify-between">
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+                  {project.title}
+                </h3>
+                <FileText className="h-5 w-5 text-slate-400" />
+              </div>
+              <p className="mt-3 text-sm text-slate-600 dark:text-slate-400">
+                {project.description}
+              </p>
+              <div className="mt-4 flex items-center gap-4 text-xs text-slate-500 dark:text-slate-500">
+                {project.techStack.slice(0, 2).map((tech, i) => (
+                  <span key={tech} className="flex items-center gap-1">
+                    <span className="inline-block h-2 w-2 rounded-full bg-yellow-500" />
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </motion.article>
+          ))}
+        </div>
+      </MotionSection>
+
+      <MotionSection id="experience" className="mx-auto max-w-7xl px-6 pb-20">
+        <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
+          Experience
+        </h2>
+        <div className="mt-10 max-w-3xl space-y-8">
+          {experiences.map((experience) => (
+            <motion.div
+              key={experience.role}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+                {experience.role}
+              </h3>
+              <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
+                {experience.company} · {experience.period}
+              </p>
+              <p className="mt-3 text-base text-slate-600 dark:text-slate-400">
+                {experience.details}
+              </p>
+            </motion.div>
+          ))}
+        </div>
+      </MotionSection>
+
+      <MotionSection id="blogs" className="mx-auto max-w-7xl px-6 pb-20">
+        <div className="flex items-center justify-between">
+          <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
+            Recent Blogs
+          </h2>
+          <Link
+            to="/blogs"
+            className="text-sm font-medium text-slate-900 underline decoration-slate-300 underline-offset-4 transition hover:decoration-slate-500 dark:text-white dark:decoration-slate-600"
+          >
+            View all
+          </Link>
+        </div>
+        <div className="mt-10 grid gap-6 md:grid-cols-3">
+          {blogs.slice(0, 3).map((blog) => (
+            <motion.div
+              key={blog.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="group"
+            >
+              <Link to={`/blogs/${blog.slug}`}>
+                <h3 className="text-lg font-bold text-slate-900 group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400">
+                  {blog.title}
+                </h3>
+                <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
+                  {blog.summary}
+                </p>
+                <p className="mt-3 text-xs text-slate-500 dark:text-slate-500">
+                  {blog.date} · {blog.readTime}
+                </p>
+              </Link>
+            </motion.div>
+          ))}
+        </div>
+      </MotionSection>
+
+      <MotionSection id="contact" className="mx-auto max-w-7xl px-6 pb-24">
+        <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
+          Get In Touch
+        </h2>
+        <div className="mt-10 grid gap-10 md:grid-cols-2">
+          <div>
+            <p className="text-base text-slate-600 dark:text-slate-400">
+              Have a project idea or opportunity? I respond within 24 hours.
+            </p>
+            <div className="mt-8 space-y-4">
+              <div className="flex items-center gap-3 text-slate-600 dark:text-slate-400">
+                <Mail className="h-5 w-5" />
+                <span>parasjagdale15@gmail.com</span>
+              </div>
+              <div className="flex items-center gap-3 text-slate-600 dark:text-slate-400">
+                <MapPin className="h-5 w-5" />
+                <span>India</span>
+              </div>
+            </div>
+            <div className="mt-8 flex gap-4">
+              <a
+                href="https://github.com/ParasJagdale"
+                target="_blank"
+                rel="noreferrer"
+                className="text-slate-600 transition hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
+              >
+                <Github className="h-6 w-6" />
+              </a>
+              <a
+                href="https://www.linkedin.com/"
+                target="_blank"
+                rel="noreferrer"
+                className="text-slate-600 transition hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
+              >
+                <Linkedin className="h-6 w-6" />
+              </a>
+              <a
+                href="https://x.com/"
+                target="_blank"
+                rel="noreferrer"
+                className="text-slate-600 transition hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
+              >
+                <Twitter className="h-6 w-6" />
+              </a>
+            </div>
+          </div>
+          <ContactForm />
+        </div>
+      </MotionSection>
+    </main>
+  );
+};
+
+const ContactForm = () => {
   const [contactForm, setContactForm] = useState({
     name: "",
     email: "",
@@ -26,20 +438,19 @@ const Portfolio = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState("");
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
     setContactForm((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     setIsSubmitting(true);
     setSubmitStatus("");
 
-    // Validate form
     if (!contactForm.name || !contactForm.email || !contactForm.message) {
       setSubmitStatus("error");
       setIsSubmitting(false);
@@ -47,63 +458,120 @@ const Portfolio = () => {
     }
 
     try {
-      // Initialize EmailJS
-      emailjs.init(EMAIL_CONFIG.PUBLIC_KEY);
-
-      // Prepare email parameters for main email
+      emailjs.init(process.env.REACT_APP_EMAILJS_PUBLIC_KEY);
       const templateParams = {
         from_name: contactForm.name,
         from_email: contactForm.email,
         message: contactForm.message,
-        to_email: 'parasjagdale15@gmail.com',
+        to_email: "parasjagdale15@gmail.com",
         reply_to: contactForm.email,
       };
 
-      // Send main email to you
       const response = await emailjs.send(
-        EMAIL_CONFIG.SERVICE_ID,
-        EMAIL_CONFIG.TEMPLATE_ID,
-        templateParams
+        process.env.REACT_APP_EMAILJS_SERVICE_ID,
+        process.env.REACT_APP_EMAILJS_TEMPLATE_ID,
+        templateParams,
       );
 
       if (response.status === 200) {
-        // Try to send auto-reply (optional - won't break if it fails)
-        try {
-          const autoReplyParams = {
-            to_name: contactForm.name,
-            to_email: contactForm.email,
-            from_name: 'Paras Jagdale',
-            user_email: contactForm.email,
-            user_name: contactForm.name,
-            recipient_email: contactForm.email,
-            recipient_name: contactForm.name,
-          };
-
-          await emailjs.send(
-            EMAIL_CONFIG.SERVICE_ID,
-            EMAIL_CONFIG.AUTOREPLY_TEMPLATE_ID,
-            autoReplyParams
-          );
-        } catch (autoReplyError) {
-          // Auto-reply failed, but main email succeeded - this is okay
-          console.error('Auto-reply failed:', autoReplyError);
-        }
-
         setSubmitStatus("success");
         setContactForm({ name: "", email: "", message: "" });
       } else {
         setSubmitStatus("error");
       }
     } catch (error) {
-      console.error('Email sending failed:', error);
+      console.error("Email sending failed:", error);
       setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const scrollToSection = (sectionId) => {
-    const element = document.getElementById(sectionId);
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <input
+          id="contact-name"
+          type="text"
+          name="name"
+          value={contactForm.name}
+          onChange={handleInputChange}
+          className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 placeholder-slate-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:placeholder-slate-400"
+          placeholder="Your name"
+        />
+      </div>
+      <div>
+        <input
+          id="contact-email"
+          type="email"
+          name="email"
+          value={contactForm.email}
+          onChange={handleInputChange}
+          className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 placeholder-slate-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:placeholder-slate-400"
+          placeholder="your.email@example.com"
+        />
+      </div>
+      <div>
+        <textarea
+          id="contact-message"
+          name="message"
+          value={contactForm.message}
+          onChange={handleInputChange}
+          rows={5}
+          className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 placeholder-slate-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:placeholder-slate-400"
+          placeholder="Your message..."
+        />
+      </div>
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        className="w-full rounded-lg bg-slate-900 px-6 py-3 text-sm font-medium text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-70 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100"
+      >
+        {isSubmitting ? "Sending..." : "Send Message"}
+      </button>
+      {submitStatus === "success" && (
+        <p className="mt-4 text-sm text-emerald-500">
+          Message sent. I will reply soon.
+        </p>
+      )}
+      {submitStatus === "error" && (
+        <p className="mt-4 text-sm text-rose-500">
+          Please complete all fields and try again.
+        </p>
+      )}
+    </form>
+  );
+};
+
+const AppShell = () => {
+  const location = useLocation();
+  const isHome = location.pathname === "/";
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, { stiffness: 120, damping: 30 });
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [theme, setTheme] = useState("light");
+  const [isResumeOpen, setIsResumeOpen] = useState(false);
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)",
+    ).matches;
+    const nextTheme = savedTheme || (prefersDark ? "dark" : "light");
+    setTheme(nextTheme);
+    document.documentElement.classList.toggle("dark", nextTheme === "dark");
+  }, []);
+
+  const toggleTheme = () => {
+    const nextTheme = theme === "dark" ? "light" : "dark";
+    setTheme(nextTheme);
+    localStorage.setItem("theme", nextTheme);
+    document.documentElement.classList.toggle("dark", nextTheme === "dark");
+  };
+
+  const scrollToSection = (id) => {
+    if (!isHome) return;
+    const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
       setIsMenuOpen(false);
@@ -111,526 +579,153 @@ const Portfolio = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100">
-      {/* Header */}
-      <header className="bg-gray-950 shadow-sm fixed w-full top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <div className="text-2xl font-bold text-white">Paras Jagdale</div>
-
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex space-x-8">
+    <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+      <motion.div
+        className="fixed left-0 right-0 top-0 z-[70] h-1 origin-left bg-blue-500"
+        style={{ scaleX }}
+      />
+      <header className="fixed top-0 z-50 w-full border-b border-slate-200 bg-white/80 backdrop-blur dark:border-slate-800 dark:bg-slate-950/80">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+          <Link
+            to="/"
+            className="text-xl font-bold text-slate-900 dark:text-white"
+          >
+            Paras Jagdale
+          </Link>
+          <nav className="hidden items-center gap-6 md:flex">
+            {navItems.map((item) => (
               <button
-                onClick={() => scrollToSection("about")}
-                className="text-gray-300 hover:text-white transition-colors"
+                key={item.id}
+                type="button"
+                onClick={() => scrollToSection(item.id)}
+                className="text-sm font-medium text-slate-600 transition hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
               >
-                About
+                {item.label}
               </button>
-              <button
-                onClick={() => scrollToSection("projects")}
-                className="text-gray-300 hover:text-white transition-colors"
-              >
-                Projects
-              </button>
-              <button
-                onClick={() => scrollToSection("skills")}
-                className="text-gray-300 hover:text-white transition-colors"
-              >
-                Skills
-              </button>
-              <button
-                onClick={() => scrollToSection("contact")}
-                className="text-gray-300 hover:text-white transition-colors"
-              >
-                Contact
-              </button>
-            </nav>
-
-            {/* Mobile menu button */}
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden p-2 rounded-md text-gray-300 hover:text-white hover:bg-gray-800"
+            ))}
+            <NavLink
+              to="/blogs"
+              className="text-sm font-medium text-slate-600 transition hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
             >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              Blog
+            </NavLink>
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="rounded-full border border-slate-200/60 p-2 text-slate-600 transition hover:text-slate-900 dark:border-white/10 dark:text-slate-300"
+              aria-label="Toggle color theme"
+            >
+              {theme === "dark" ? (
+                <Sun className="h-4 w-4" />
+              ) : (
+                <Moon className="h-4 w-4" />
+              )}
             </button>
-          </div>
-
-          {/* Mobile Navigation */}
-          {isMenuOpen && (
-            <nav className="md:hidden pb-4">
-              <div className="flex flex-col space-y-2">
-                <button
-                  onClick={() => scrollToSection("about")}
-                  className="text-left py-2 text-gray-300 hover:text-white transition-colors"
-                >
-                  About
-                </button>
-                <button
-                  onClick={() => scrollToSection("projects")}
-                  className="text-left py-2 text-gray-300 hover:text-white transition-colors"
-                >
-                  Projects
-                </button>
-                <button
-                  onClick={() => scrollToSection("skills")}
-                  className="text-left py-2 text-gray-300 hover:text-white transition-colors"
-                >
-                  Skills
-                </button>
-                <button
-                  onClick={() => scrollToSection("contact")}
-                  className="text-left py-2 text-gray-300 hover:text-white transition-colors"
-                >
-                  Contact
-                </button>
-              </div>
-            </nav>
-          )}
+          </nav>
+          <button
+            type="button"
+            onClick={() => setIsMenuOpen((prev) => !prev)}
+            className="rounded-full border border-slate-200/60 p-2 text-slate-600 transition hover:text-slate-900 dark:border-white/10 dark:text-slate-300 md:hidden"
+            aria-label="Toggle menu"
+          >
+            {isMenuOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
+          </button>
         </div>
+        {isMenuOpen && (
+          <div className="border-t border-slate-200/60 bg-white/80 px-6 py-4 dark:border-white/10 dark:bg-slate-950/90 md:hidden">
+            <div className="flex flex-col gap-3">
+              {navItems.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => scrollToSection(item.id)}
+                  className="text-left text-sm font-semibold text-slate-600 dark:text-slate-300"
+                >
+                  {item.label}
+                </button>
+              ))}
+              <NavLink
+                to="/blogs"
+                className="text-left text-sm font-semibold text-slate-600 dark:text-slate-300"
+              >
+                Blog
+              </NavLink>
+              <button
+                type="button"
+                onClick={toggleTheme}
+                className="text-left text-sm font-semibold text-slate-600 dark:text-slate-300"
+              >
+                Toggle theme
+              </button>
+            </div>
+          </div>
+        )}
       </header>
 
-      {/* Hero Section */}
-      <section className="pt-20 pb-16 bg-gradient-to-br from-gray-900 to-gray-800 relative overflow-hidden">
-        {/* Galaxy Background */}
-        <Galaxy />
-        
-        {/* Hero Content */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center">
-            <div className="relative inline-block mb-8">
-              <div className="w-48 h-48 mx-auto rounded-full bg-gradient-to-br from-purple-700 to-pink-700 p-1 relative z-20">
-                <div className="w-full h-full rounded-full bg-gray-900 p-2">
-                  <img
-                    src={require("./paras.png")}
-                    className="w-full h-full object-cover rounded-full"
-                    alt="Paras"
-                  />
-                </div>
-              </div>
-            </div>
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 relative z-20">
-              Hi, I'm <span className="text-blue-400">Paras Jagdale</span>
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto relative z-20">
-              Passionate Student, Purposeful Developer
+      <div className="pt-20">
+        <Routes>
+          <Route
+            path="/"
+            element={<Home onOpenResume={() => setIsResumeOpen(true)} />}
+          />
+          <Route path="/blogs" element={<BlogList />} />
+          <Route path="/blogs/:slug" element={<BlogDetail />} />
+        </Routes>
+      </div>
+
+      <footer className="border-t border-slate-200 bg-white py-12 dark:border-slate-800 dark:bg-slate-950">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
+            <p className="text-sm text-slate-600 dark:text-slate-400">
+              © 2026 Paras Jagdale. All rights reserved.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center relative z-20">
-              <button
-                onClick={() => scrollToSection("projects")}
-                className="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            <div className="flex gap-6">
+              <a
+                href="https://github.com/ParasJagdale"
+                target="_blank"
+                rel="noreferrer"
+                className="text-slate-600 transition hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
               >
-                View My Work
-              </button>
-              <button
-                onClick={() => scrollToSection("contact")}
-                className="px-8 py-3 border-2 border-blue-600 text-blue-400 rounded-lg hover:bg-blue-600 hover:text-white transition-colors"
+                <Github className="h-5 w-5" />
+              </a>
+              <a
+                href="https://www.linkedin.com/"
+                target="_blank"
+                rel="noreferrer"
+                className="text-slate-600 transition hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
               >
-                Get In Touch
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* About Section */}
-      <section id="about" className="py-16 bg-gray-950">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              About Me
-            </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto">
-              I'm a dedicated developer with a passion for creating innovative
-              solutions and bringing ideas to life through code.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h3 className="text-2xl font-semibold text-white mb-4">
-                My Story
-              </h3>
-              <p className="text-gray-400 mb-6">
-                With several years of experience in web development, I
-                specialize in creating modern, responsive, and user-friendly
-                applications. I'm passionate about clean code, best practices,
-                and continuous learning.
-              </p>
-              <div className="flex flex-wrap gap-2">
-                <span className="px-3 py-1 bg-blue-900 text-blue-300 rounded-full text-sm">
-                  Full Stack Development
-                </span>
-                <span className="px-3 py-1 bg-green-900 text-green-300 rounded-full text-sm">
-                  React & Node.js
-                </span>
-                <span className="px-3 py-1 bg-purple-900 text-purple-300 rounded-full text-sm">
-                  MongoDB
-                </span>
-                <span className="px-3 py-1 bg-orange-900 text-orange-300 rounded-full text-sm">
-                  UI/UX Design
-                </span>
-              </div>
-            </div>
-            <div className="text-center">
-              <div className="grid grid-cols-2 gap-6">
-                <div className="bg-gray-900 p-6 rounded-lg">
-                  <div className="text-3xl font-bold text-blue-400">10+</div>
-                  <div className="text-gray-400">Full-Stack Projects Built</div>
-                </div>
-                <div className="bg-gray-900 p-6 rounded-lg">
-                  <div className="text-3xl font-bold text-green-400">800+</div>
-                  <div className="text-gray-400">Hours of Coding Practice</div>
-                </div>
-                <div className="bg-gray-900 p-6 rounded-lg">
-                  <div className="text-3xl font-bold text-purple-400">4</div>
-                  <div className="text-gray-400">Internships & Hackathons</div>
-                </div>
-                <div className="bg-gray-900 p-6 rounded-lg">
-                  <div className="text-3xl font-bold text-orange-400">100%</div>
-                  <div className="text-gray-400">Commitment to Learning</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Projects Section */}
-      <section id="projects" className="py-16 bg-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Featured Projects
-            </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto">
-              Here are some of my recent projects that showcase my skills and
-              passion for development.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {projects.map((project, index) => (
-              <div
-                key={index}
-                className="bg-gray-950 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
+                <Linkedin className="h-5 w-5" />
+              </a>
+              <a
+                href="https://x.com/"
+                target="_blank"
+                rel="noreferrer"
+                className="text-slate-600 transition hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
               >
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="h-48 w-full object-cover"
-                />
-
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold text-white mb-2">
-                    {project.title}
-                  </h3>
-                  <p className="text-gray-400 mb-4">{project.description}</p>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {project.techStack.map((tech, i) => (
-                      <span
-                        key={i}
-                        className="px-2 py-1 bg-gray-800 text-gray-300 rounded text-sm"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="flex gap-4">
-                    <a
-                      href={project.liveLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-blue-400 hover:text-blue-200 transition-colors"
-                    >
-                      <ExternalLink size={16} />
-                      Live Demo
-                    </a>
-
-                    <a
-                      href={project.codeLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
-                    >
-                      <Github size={16} />
-                      Source Code
-                    </a>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Skills Section */}
-      <section id="skills" className="py-16 bg-gray-950">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Skills & Technologies
-            </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto">
-              I'm proficient in a wide range of technologies and always eager to
-              learn new ones.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-blue-900 rounded-full flex items-center justify-center mx-auto mb-4">
-                <div className="w-8 h-8 bg-blue-600 rounded"></div>
-              </div>
-              <h3 className="text-xl font-semibold text-white mb-2">
-                Frontend
-              </h3>
-              <p className="text-gray-400 mb-4">
-                Creating beautiful and responsive user interfaces
-              </p>
-              <div className="flex flex-wrap gap-2 justify-center">
-                <span className="px-3 py-1 bg-gray-800 text-gray-200 rounded-full text-sm">
-                  React
-                </span>
-                <span className="px-3 py-1 bg-gray-800 text-gray-200 rounded-full text-sm">
-                  JavaScript
-                </span>
-                <span className="px-3 py-1 bg-gray-800 text-gray-200 rounded-full text-sm">
-                  CSS
-                </span>
-                <span className="px-3 py-1 bg-gray-800 text-gray-200 rounded-full text-sm">
-                  HTML
-                </span>
-              </div>
+                <Twitter className="h-5 w-5" />
+              </a>
             </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-green-900 rounded-full flex items-center justify-center mx-auto mb-4">
-                <div className="w-8 h-8 bg-green-600 rounded"></div>
-              </div>
-              <h3 className="text-xl font-semibold text-white mb-2">Backend</h3>
-              <p className="text-gray-400 mb-4">
-                Building robust and scalable server-side applications
-              </p>
-              <div className="flex flex-wrap gap-2 justify-center">
-                <span className="px-3 py-1 bg-gray-800 text-gray-200 rounded-full text-sm">
-                  Node.js
-                </span>
-                <span className="px-3 py-1 bg-gray-800 text-gray-200 rounded-full text-sm">
-                  Express
-                </span>
-                <span className="px-3 py-1 bg-gray-800 text-gray-200 rounded-full text-sm">
-                  MongoDB
-                </span>
-                <span className="px-3 py-1 bg-gray-800 text-gray-200 rounded-full text-sm">
-                  APIs
-                </span>
-              </div>
-            </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-purple-900 rounded-full flex items-center justify-center mx-auto mb-4">
-                <div className="w-8 h-8 bg-purple-600 rounded"></div>
-              </div>
-              <h3 className="text-xl font-semibold text-white mb-2">Tools</h3>
-              <p className="text-gray-400 mb-4">
-                Using modern development tools and workflows
-              </p>
-              <div className="flex flex-wrap gap-2 justify-center">
-                <span className="px-3 py-1 bg-gray-800 text-gray-200 rounded-full text-sm">
-                  Git
-                </span>
-                <span className="px-3 py-1 bg-gray-800 text-gray-200 rounded-full text-sm">
-                  Docker
-                </span>
-                <span className="px-3 py-1 bg-gray-800 text-gray-200 rounded-full text-sm">
-                  VS Code
-                </span>
-                <span className="px-3 py-1 bg-gray-800 text-gray-200 rounded-full text-sm">
-                  AWS
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact Section */}
-      <section id="contact" className="py-16 bg-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Get In Touch
-            </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto">
-              I'm always open to discussing new opportunities and interesting
-              projects. Let's connect!
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-12">
-            <div>
-              <h3 className="text-2xl font-semibold text-white mb-6">
-                Contact Information
-              </h3>
-              <div className="space-y-4">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-blue-900 rounded-full flex items-center justify-center">
-                    <Mail className="text-blue-400" size={20} />
-                  </div>
-                  <div>
-                    <div className="font-semibold text-white">Email</div>
-                    <div className="text-gray-400">
-                      parasjagdale15@gmail.com
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-green-900 rounded-full flex items-center justify-center">
-                    <Phone className="text-green-400" size={20} />
-                  </div>
-                  <div>
-                    <div className="font-semibold text-white">Phone</div>
-                    <div className="text-gray-400">+91 9579201729</div>
-                  </div>
-                </div>
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-purple-900 rounded-full flex items-center justify-center">
-                    <MapPin className="text-purple-400" size={20} />
-                  </div>
-                  <div>
-                    <div className="font-semibold text-white">Location</div>
-                    <div className="text-gray-400">Pune, India</div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-8">
-                <h4 className="text-lg font-semibold text-white mb-4">
-                  Follow Me
-                </h4>
-                <div className="flex gap-4">
-                  <a
-                    href="https://github.com/ParasBot"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-12 h-12 bg-gray-800 text-white rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors"
-                  >
-                    <Github size={20} />
-                  </a>
-                  <a
-                    href="https://www.linkedin.com/in/paras-jagdale/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-12 h-12 bg-blue-700 text-white rounded-full flex items-center justify-center hover:bg-blue-800 transition-colors"
-                  >
-                    <Linkedin size={20} />
-                  </a>
-                  <a
-                    href="https://www.instagram.com/paras__029_/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-12 h-12 bg-pink-600 text-white rounded-full flex items-center justify-center hover:bg-pink-700 transition-colors"
-                  >
-                    <Instagram size={20} />
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-gray-950 p-8 rounded-lg shadow-md">
-              <h3 className="text-2xl font-semibold text-white mb-6">
-                Send Me a Message
-              </h3>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div>
-                  <label
-                    htmlFor="name"
-                    className="block text-sm font-medium text-gray-300 mb-2"
-                  >
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={contactForm.name}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-4 py-2 border border-gray-700 bg-gray-900 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Your Name"
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-medium text-gray-300 mb-2"
-                  >
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={contactForm.email}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-4 py-2 border border-gray-700 bg-gray-900 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="your.email@example.com"
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="message"
-                    className="block text-sm font-medium text-gray-300 mb-2"
-                  >
-                    Message
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    value={contactForm.message}
-                    onChange={handleInputChange}
-                    required
-                    rows={4}
-                    className="w-full px-4 py-2 border border-gray-700 bg-gray-900 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Tell me about your project..."
-                  />
-                </div>
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {isSubmitting ? "Sending..." : "Send Message"}
-                </button>
-                {submitStatus === "success" && (
-                  <div className="text-green-400 text-center p-3 bg-green-900/20 rounded-lg border border-green-500/30">
-                    <div className="font-semibold">Message sent successfully!</div>
-                    <div className="text-sm mt-1">Thank you for reaching out. I'll get back to you soon!</div>
-                  </div>
-                )}
-                {submitStatus === "error" && (
-                  <div className="text-red-400 text-center p-3 bg-red-900/20 rounded-lg border border-red-500/30">
-                    <div className="font-semibold">Oops! Something went wrong.</div>
-                    <div className="text-sm mt-1">Please check your information and try again, or contact me directly at parasjagdale15@gmail.com</div>
-                  </div>
-                )}
-              </form>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="bg-gray-950 text-gray-400 py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <p>© Designed and Developed by Paras Jagdale.</p>
           </div>
         </div>
       </footer>
+
+      <ResumeModal
+        isOpen={isResumeOpen}
+        onClose={() => setIsResumeOpen(false)}
+      />
     </div>
   );
 };
 
-export default Portfolio;
+const App = () => (
+  <>
+    <ScrollToTop />
+    <AppShell />
+  </>
+);
+
+export default App;

@@ -1,13 +1,14 @@
 export const projects = [
   {
-  title: "Wanderlust - Travel Listing Web App",
-  description:
-    "A dynamic web application for exploring and posting travel listings. Features user authentication, reviews, and image uploads.",
-  techStack: ["Node.js", "Express", "MongoDB", "EJS", "Cloudinary"],
-  liveLink: "https://wanderlust-travel-marketplace.onrender.com/listings", 
-  codeLink: "https://github.com/ParasJagdale/wanderlust-travel-marketplace", 
-  image: "/images/Wanderlust.png",
-},
+    title: "Wanderlust - Travel Listing Web App",
+    description:
+      "A dynamic web application for exploring and posting travel listings. Features user authentication, reviews, and image uploads.",
+    techStack: ["Node.js", "Express", "MongoDB", "EJS", "Cloudinary"],
+    liveLink: "https://wanderlust-travel-marketplace.onrender.com/listings",
+    codeLink: "https://github.com/ParasJagdale/wanderlust-travel-marketplace",
+    image: "/images/Wanderlust.jpg",
+    featured: true,
+  },
   {
     title: "MERN-Based Investment Platform (Inspired by Zerodha)",
     description:
@@ -15,7 +16,8 @@ export const projects = [
     techStack: ["React", "Node.js", "MongoDB"],
     liveLink: "https://zerodha-clone-frontend.vercel.app/",
     codeLink: "https://github.com/ParasBot/Zerodha-Clone",
-    image: "/images/mern.png",
+    image: "/images/mern.jpg",
+    featured: true,
   },
   {
     title: "Django-Based Image Sharing App (Shario)",
@@ -24,7 +26,7 @@ export const projects = [
     techStack: ["Django", "Bootstrap", "SQLite"],
     liveLink: "https://github.com/ParasBot/Django-intership-project",
     codeLink: "https://github.com/ParasBot/Django-intership-project",
-    image: "/images/python.png",
+    image: "/images/python.jpg",
   },
   {
     title: "Weather Forecast React App",
@@ -33,7 +35,7 @@ export const projects = [
     techStack: ["React", "API", "CSS"],
     liveLink: "https://weather-app-react-three-nu.vercel.app/",
     codeLink: "https://github.com/ParasBot/Weather-App-React",
-    image: "/images/weather.png",
+    image: "/images/weather.jpg",
   },
   {
     title: "SplashCursor - Animated React Component",
@@ -43,7 +45,7 @@ export const projects = [
     liveLink:
       "https://claude.ai/public/artifacts/679237c5-5b18-4ff0-a2fb-26e89fa77baf",
     codeLink: "#",
-    image: "/images/cursor.png",
+    image: "/images/cursor.jpg",
   },
   {
     title: "Lucky Numbers - React Lottery Simulator",
@@ -52,16 +54,16 @@ export const projects = [
     techStack: ["React", "Tailwind CSS", "JavaScript", "React Hooks"],
     liveLink: "https://lottery-game-chi.vercel.app/",
     codeLink: "https://github.com/ParasBot/Lottery-Game",
-    image: "/images/lottery.png",
+    image: "/images/lottery.jpg",
   },
   {
-  title: "AI Interviewer - Mock Interview Platform",
-  description:
-    "A smart interview simulation tool for students that generates personalized interview questions from uploaded resumes and job descriptions, with instant AI-based feedback and scoring.",
-  techStack: ["HTML", "CSS", "JavaScript", "OpenRouter API", "PDF.js"],
-  liveLink: "https://mock-interview-app-three.vercel.app/", // Replace with your deployed link
-  codeLink: "https://github.com/ParasJagdale/mock-interview-app", // Replace with your actual repo link
-  image: "/images/AI_Interviewer.png" // Replace with actual image path
-}
-
+    title: "AI Interviewer - Mock Interview Platform",
+    description:
+      "A smart interview simulation tool for students that generates personalized interview questions from uploaded resumes and job descriptions, with instant AI-based feedback and scoring.",
+    techStack: ["HTML", "CSS", "JavaScript", "OpenRouter API", "PDF.js"],
+    liveLink: "https://mock-interview-app-three.vercel.app/", // Replace with your deployed link
+    codeLink: "https://github.com/ParasJagdale/mock-interview-app", // Replace with your actual repo link
+    image: "/images/AI_Interviewer.jpg", // Replace with actual image path
+    featured: true,
+  },
 ];
