@@ -306,6 +306,28 @@ const Home = ({ onOpenResume }) => {
                   </span>
                 ))}
               </div>
+              <div className="mt-6 flex gap-4">
+                {project.liveLink && project.liveLink !== "#" && (
+                  <a
+                    href={project.liveLink}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-sm font-medium text-blue-600 transition hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                  >
+                    Live Demo
+                  </a>
+                )}
+                {project.codeLink && project.codeLink !== "#" && (
+                  <a
+                    href={project.codeLink}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-sm font-medium text-slate-600 transition hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200"
+                  >
+                    Source Code
+                  </a>
+                )}
+              </div>
             </motion.article>
           ))}
         </div>
